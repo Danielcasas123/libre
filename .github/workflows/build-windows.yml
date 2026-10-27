@@ -1,0 +1,87 @@
+
+name: Build Inova 1 for Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Descargar proyecto
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Descargar LibreWolf portable
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $api = "https://librewolf.dev/api/v1/repos/librewolf/bsys6/releases/latest"
+          $release = Invoke-RestMethod -Uri $api -Headers @{
+            "User-Agent" = "Inova1-build"
+          }
+
+          $asset = $release.assets |
+            Where-Object {
+              $_.name -match "windows-x86_64-portable\.zip$"
+            } |
+            Select-Object -First 1
+
+          if (-not $asset) {
+            throw "No se encontró el ZIP portable de LibreWolf."
+          }
+
+          New-Item -ItemType Directory -Force `
+            -Path "resources/librewolf" | Out-Null
+
+          $zip = Join-Path $env:RUNNER_TEMP "librewolf.zip"
+          Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $zip
+          Expand-Archive -Path $zip `
+            -DestinationPath "resources/librewolf" -Force
+
+          $exe = Get-ChildItem "resources/librewolf" `
+            -Filter "librewolf.exe" -Recurse |
+            Select-Object -First 1
+
+          if (-not $exe) {
+            throw "El paquete descargado no contiene librewolf.exe."
+          }
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Generar instalador EXE
+        run: npm run dist
+
+      - name: Verificar instalador
+        shell: pwsh
+        run: |
+          $setup = Get-ChildItem "release" -Filter "*.exe" |
+            Select-Object -First 1
+
+          if (-not $setup) {
+            throw "No se generó ningún instalador EXE."
+          }
+
+          Write-Host "Instalador creado: $($setup.FullName)"
+
+      - name: Publicar instalador
+        uses: actions/upload-artifact@v4
+        with:
+          name: Inova-1-Windows-Installer
+          path: release/*.exe
+          if-no-files-found: error
+          retention-days: 14
