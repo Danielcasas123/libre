@@ -1,0 +1,38 @@
+{
+  "name": "inova-1",
+  "version": "1.0.0",
+  "description": "Inova 1 desktop shell with bundled LibreWolf",
+  "main": "src/main.js",
+  "author": "Inova 1",
+  "license": "MPL-2.0",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^38.2.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.inova1.desktop",
+    "productName": "Inova 1",
+    "asar": true,
+    "directories": { "output": "release" },
+    "files": ["src/**/*", "package.json"],
+    "extraResources": [
+      { "from": "resources/librewolf", "to": "librewolf", "filter": ["**/*"] }
+    ],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "artifactName": "Inova-1-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Inova 1",
+      "runAfterFinish": true
+    }
+  }
+}

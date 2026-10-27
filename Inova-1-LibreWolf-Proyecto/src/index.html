@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:">
+  <title>Inova 1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">i</div><div><b>INOVA</b><span>VERSIÓN 1.0</span></div></div>
+      <div class="side-label">ESPACIO DE TRABAJO</div>
+      <button class="nav active" id="homeBtn"><span>⌂</span> Inicio</button>
+      <button class="nav" id="searchBtn"><span>⌕</span> Buscar en la web</button>
+      <div class="sidebar-bottom"><div class="status-dot"></div><span id="statusText">Preparando navegador…</span></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><span class="crumb">Inicio <span>/</span> Panel</span><div class="profile"><div class="avatar">I</div><span>Inova 1</span></div></header>
+      <section class="hero">
+        <div class="eyebrow"><span class="pulse"></span> TU ESPACIO DIGITAL</div>
+        <h1>Hola, bienvenido a<br><span>Inova 1.</span></h1>
+        <p>Un espacio sencillo para empezar a explorar la web.</p>
+        <form id="searchForm" class="search-box">
+          <span class="search-icon">⌕</span><input id="query" autocomplete="off" placeholder="Busca algo o escribe una dirección…" aria-label="Búsqueda web">
+          <button type="submit">Buscar <span>↗</span></button>
+        </form>
+        <div class="search-hint">Las búsquedas y los enlaces se abren en LibreWolf, incluido con el instalador.</div>
+      </section>
+      <section class="quick-section"><div class="section-heading"><div><h2>Accesos rápidos</h2><p>Empieza por uno de estos sitios</p></div><span class="small-tag">WEB</span></div>
+        <div class="tiles">
+          <button class="tile" data-url="https://www.wikipedia.org/"><span class="tile-icon violet">W</span><b>Wikipedia</b><small>Explora conocimiento</small><span class="tile-arrow">↗</span></button>
+          <button class="tile" data-url="https://www.youtube.com/"><span class="tile-icon red">▶</span><b>YouTube</b><small>Videos y canales</small><span class="tile-arrow">↗</span></button>
+          <button class="tile" data-url="https://www.google.com/"><span class="tile-icon blue">G</span><b>Google</b><small>Encuentra respuestas</small><span class="tile-arrow">↗</span></button>
+        </div>
+      </section>
+      <footer><span>INOVA 1 <i>•</i> ESCRITORIO</span><span>Diseñado para Windows</span></footer>
+    </main>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="renderer.js"></script>
+</body>
+</html>
